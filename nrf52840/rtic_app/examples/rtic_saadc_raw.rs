@@ -1,4 +1,4 @@
-// examples/rtic_hello.rs
+// examples/rtic_saadc_raw.rs
 
 #![no_main]
 #![no_std]
@@ -11,22 +11,9 @@ use panic_rtt_target as _;
 mod app {
     use super::*;
     use cortex_m::asm;
-    use embedded_hal::digital::{OutputPin, StatefulOutputPin};
-    use hal::{
-        gpio::p0::Parts as P0Parts,
-        gpio::{p0::P0_03, Input, Level, Output, Pin, PushPull},
-        monotonic::MonotonicTimer,
-        //saadc::{Resolution, Saadc, SaadcConfig},
-    };
-    use nrf52840_hal::{gpio::Disconnected, pac::saadc::resolution, saadc};
-    use pac::{
-        saadc::{ch::config::*, oversample::OVERSAMPLE_A, resolution::VAL_A},
-        TIMER0,
-    };
 
+    use pac::saadc::{ch::config::*, oversample::OVERSAMPLE_A, resolution::VAL_A};
     use rtt_target::{rprintln, rtt_init_print};
-    #[monotonic(binds = TIMER0, default = true)]
-    type MyMono = MonotonicTimer<TIMER0, 16_000_000>;
 
     #[shared]
     struct Shared {}
@@ -37,12 +24,7 @@ mod app {
     #[init]
     fn init(cx: init::Context) -> (Shared, Local, init::Monotonics) {
         rtt_init_print!();
-        rprintln!("\n--- Hello e7020e ---\n");
-
-        let mono = MyMono::new(cx.device.TIMER0);
-
-        let gpios = P0Parts::new(cx.device.P0);
-        let led = gpios.p0_13.into_push_pull_output(Level::High).degrade();
+        rprintln!("\n--- saadc raw ---\n");
 
         let saadc = cx.device.SAADC;
 
@@ -54,7 +36,7 @@ mod app {
         saadc.samplerate.write(|w| w.mode().task());
 
         saadc.ch[0].config.write(|w| {
-            w.refsel().variant(REFSEL_A::INTERNAL);
+            // w.refsel().variant(REFSEL_A::INTERNAL);
             w.gain().variant(GAIN_A::GAIN4);
             w.tacq().variant(TACQ_A::_20US);
             w.mode().variant(MODE_A::DIFF);
@@ -90,22 +72,19 @@ mod app {
             saadc.tasks_start.write(|w| unsafe { w.bits(1) });
             saadc.tasks_sample.write(|w| unsafe { w.bits(1) });
 
-            let mut c = 0;
-            while saadc.events_end.read().bits() == 0 {
-                c += 1;
-            }
+            while saadc.events_end.read().bits() == 0 {}
 
             saadc.events_end.reset();
 
             // Second fence to prevent optimizations creating issues with the EasyDMA-modified `val`.
             core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
 
-            rprintln!("c {} val {}", c, val);
+            rprintln!("{}, ", val);
 
-            delay.delay_us(500);
+            delay.delay_us(1000);
         }
-
-        (Shared {}, Local {}, init::Monotonics(mono))
+        #[allow(unreachable_code)]
+        (Shared {}, Local {}, init::Monotonics())
     }
 
     #[idle]
