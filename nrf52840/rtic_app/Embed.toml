@@ -15,9 +15,7 @@ protocol = "Swd"
 [default.flashing]
 # Whether or not the target should be flashed.
 enabled = true
-# Whether or not the target should be halted after reset.
-# DEPRECATED, moved to reset section
-halt_afterwards = false
+
 # Whether or not bytes erased but not rewritten with data from the ELF
 # should be restored with their contents before erasing.
 restore_unwritten_bytes = false
@@ -35,8 +33,8 @@ halt_afterwards = false
 
 [default.general]
 # The chip name of the chip to be debugged.
-# chip = "nRF52840_xxAA"
-chip = "nRF52833_xxAA"
+chip = "nRF52840_xxAA"
+# chip = "nRF52833_xxAA"
 
 # A list of chip descriptions to be loaded during runtime.
 chip_descriptions = []
@@ -67,15 +65,29 @@ enabled = true
 #              String - Directly show output from the target 
 #              Defmt  - Format output on the host, see https://defmt.ferrous-systems.com/
 #              BinaryLE - Display as raw hex
-channels = [
-    # { up = 0, down = 0, name = "name", up_mode = "BlockIfFull", format = "Defmt" },
+# channels = [
+#     # { up = 0, down = 0, name = "name", up_mode = "BlockIfFull", format = "Defmt" },
+#     { up = 0, down = 0, name = "data", up_mode = "BlockIfFull" },
+# ]
+
+up_channels = [
+    { channel = 0, mode = "BlockIfFull", format = "String", socket = "127.0.0.1:12345" },
+    # { channel = 1, mode = "BlockIfFull", format = "String", socket = "127.0.0.1:12345" },
+    # { channel = 2, mode = "BlockIfFull", format = "String", socket = "127.0.0.1:12346" },
 ]
+# The UI configuration:
+# tabs = [
+#     { up_channel = 0, name = "Log", hide = true },
+#     # { up_channel = 1, name = "sensor-data", hide = true },
+#     # { up_channel = 2, name = "battery-level", hide = true },
+# ]
+
 # The duration in ms for which the logger should retry to attach to RTT.
 timeout = 3000
 # Whether timestamps in the RTTUI are enabled
-show_timestamps = true
+# show_timestamps = true
 # Whether to save rtt history buffer on exit.
-log_enabled = false
+log_enabled = true
 # Where to save rtt history buffer relative to manifest path.
 log_path = "./logs"
 

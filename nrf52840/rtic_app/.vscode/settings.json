@@ -1,0 +1,20 @@
+{
+    "cSpell.ignoreWords": [
+        "Monotonics",
+        "OVERSAMPLE",
+        "REFSEL",
+        "RESN",
+        "TACQ",
+        "UART",
+        "UARTE",
+        "calibratedone",
+        "calibrateoffset",
+        "gpios",
+        "pseln",
+        "pselp",
+        "rprintln",
+        "rtic",
+        "saadc",
+        "samplerate"
+    ]
+}

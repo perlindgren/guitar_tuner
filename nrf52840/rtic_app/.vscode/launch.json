@@ -13,12 +13,15 @@
             "connectUnderReset": false,
             "chip": "nRF52840_xxAA",
             "runtimeExecutable": "probe-rs",
-            "runtimeArgs": ["dap-server"],    
+            "runtimeArgs": [
+                "dap-server"
+            ],
             "flashingConfig": {
                 "flashingEnabled": true,
                 "resetAfterFlashing": true,
                 "haltAfterReset": false,
             },
+            "logToFolder": true,
             "coreConfigs": [
                 {
                     "coreIndex": 0,
@@ -44,12 +47,15 @@
             "connectUnderReset": false,
             "chip": "nRF52840_xxAA",
             "runtimeExecutable": "probe-rs",
-            "runtimeArgs": ["dap-server"],   
+            "runtimeArgs": [
+                "dap-server"
+            ],
             "flashingConfig": {
                 "flashingEnabled": true,
                 "resetAfterFlashing": true,
                 "haltAfterReset": false
             },
+            "logToFolder": true,
             "coreConfigs": [
                 {
                     "coreIndex": 0,

@@ -89,10 +89,7 @@ mod app {
 
     #[idle]
     fn idle(_: idle::Context) -> ! {
-        // let mut count: u32 = 0;
         loop {
-            // rprintln!("idle {}", count);
-            //  count += 1;
             // Put core to sleep until next interrupt
             asm::wfe();
         }
