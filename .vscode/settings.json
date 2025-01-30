@@ -1,3 +1,20 @@
 {
-  "cSpell.ignoreWords": ["coeffs"]
+  "cSpell.ignoreWords": [
+    "Monotonics",
+    "RESN",
+    "TACQ",
+    "UART",
+    "UARTE",
+    "calibratedone",
+    "calibrateoffset",
+    "coeffs",
+    "oversample",
+    "pseln",
+    "pselp",
+    "refsel",
+    "rprintln",
+    "rtic",
+    "saadc",
+    "samplerate"
+  ]
 }
