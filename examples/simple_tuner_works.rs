@@ -6,9 +6,6 @@
 //! Uses a delay of `LATENCY_MS` milliseconds in case the default input and output streams are not
 //! precisely synchronised.
 
-use std::{char::EscapeUnicode, thread::available_parallelism};
-
-use biquad::*;
 use clap::Parser;
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use ringbuf::{
@@ -30,35 +27,12 @@ struct Opt {
     /// Specify the delay between input and output
     #[arg(short, long, value_name = "DELAY_MS", default_value_t = 150.0)]
     latency: f32,
-
-    /// Use the JACK host
-    #[cfg(all(
-        any(
-            target_os = "linux",
-            target_os = "dragonfly",
-            target_os = "freebsd",
-            target_os = "netbsd"
-        ),
-        feature = "jack"
-    ))]
-    #[arg(short, long)]
-    #[allow(dead_code)]
-    jack: bool,
 }
 
 fn main() -> anyhow::Result<()> {
     let opt = Opt::parse();
 
-    // Manually check for flags. Can be passed through cargo with -- e.g.
-    // cargo run --release --example beep --features jack -- --jack
-
-    let host = cpal::host_from_id(cpal::available_hosts()
-            .into_iter()
-            .find(|id| *id == cpal::HostId::Jack)
-            .expect(
-                "make sure --features jack is specified. only works on OSes where jack is available",
-            )).expect("jack host unavailable")
-    ;
+    let host = cpal::default_host();
 
     // Find devices.
     let input_device = if opt.input_device == "default" {

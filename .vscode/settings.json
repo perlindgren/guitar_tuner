@@ -8,6 +8,7 @@
     "calibratedone",
     "calibrateoffset",
     "coeffs",
+    "lerp",
     "oversample",
     "pseln",
     "pselp",
